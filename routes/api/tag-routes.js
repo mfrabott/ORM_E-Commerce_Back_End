@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
   // be sure to include its associated Product data
   try {
     const tagData = await Tag.findAll({
-    include: [{model:Product, through: ProductTag, as: 'product_tag' }]
+    include: [{model:Product, through: ProductTag, as: 'product_tags' }]
     });
     res.status(200).json(tagData);
   } catch (err) {
@@ -16,13 +16,14 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', async(req, res) => {
-  // find a single tag by its `id`
-  // be sure to include its associated Product data
+// get one product
+router.get('/:id', async (req, res) => {
+  // find a single product by its `id`
+  // be sure to include its associated Category and Tag data
   try {
     const tagData = await Tag.findByPk(req.params.id, {
       // JOIN with Category and Tag data
-      include: [{model:Product, through: ProductTag, as: 'product_tag' }]
+      include: [{model:Product, through: ProductTag, as: 'product_tags' }]
     });
 
     if (!tagData) {
@@ -30,7 +31,7 @@ router.get('/:id', async(req, res) => {
       return;
     }
 
-    res.status(200).json(TagData);
+    res.status(200).json(tagData);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -47,8 +48,9 @@ router.post('/', async (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-  // TODOO update a tag's name by its `id` value
-});
+  // TODO update a tag's name by its `id` value
+
+})
 
 router.delete('/:id', async (req, res) => {
   // delete on tag by its `id` value
